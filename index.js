@@ -1,34 +1,43 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import authRoutes from './routes/auth.js';
-import projectRoutes from './routes/projects.js';
-import uploadRoutes from './routes/upload.js';
 
-dotenv.config();
+import express from "express"
+import dotenv from "dotenv"
+import mongoose from "mongoose"
+import cors from "cors"
+import authRoutes from "./routes/auth.js"
+import projectRoutes from "./routes/projects.js"
+import uploadRoutes from "./routes/upload.js" 
+dotenv.config()
 
-const app = express();
+const app = express()
 
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(cors())
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use("/api/auth", 
+    express.json({ limit: "50mb" }), 
+    express.urlencoded({ limit: "50mb", extended: true }), 
+    authRoutes
+)
+app.use("/api/projects", 
+    express.json({ limit: "50mb" }), 
+    express.urlencoded({ limit: "50mb", extended: true }), 
+    projectRoutes
+)
 
-const PORT = process.env.PORT || 5000;
 
-import seedAdmin from './seed.js';
+app.use("/api/upload", uploadRoutes)
 
-// ...
 
-mongoose.connect(process.env.MONGO_URI)
-.then(async () => {
-    console.log('Connected to MongoDB');
-    await seedAdmin();
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-})
-.catch((err) => console.log(err));
+const PORT = process.env.PORT || 5000
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ Connected to MongoDB")
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`))
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err)
+    process.exit(1)
+  })
+
+export default app
