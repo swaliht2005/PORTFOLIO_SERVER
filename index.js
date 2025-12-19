@@ -10,7 +10,11 @@ dotenv.config()
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+    origin: ["https://portfolio-client-wtpn.vercel.app", "http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
 
 app.use("/api/auth", 
     express.json({ limit: "50mb" }), 
