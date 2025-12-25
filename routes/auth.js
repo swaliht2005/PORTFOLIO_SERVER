@@ -61,6 +61,23 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Get Public Admin Profile
+router.get('/admin-profile', async (req, res) => {
+    try {
+        const user = await User.findOne();
+        if (!user) return res.status(404).json({ message: 'No admin found' });
+        
+        // Return only necessary public info
+        res.json({
+            username: user.username,
+            avatar: user.avatar,
+            bio: user.bio
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Get Profile
 router.get('/profile', async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1];
