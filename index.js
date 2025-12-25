@@ -11,7 +11,11 @@ dotenv.config()
 const app = express()
 
 app.use(cors({
-    origin: ["https://portfolio-client-wtpn.vercel.app"],
+    origin: [
+        "https://portfolio-client-wtpn.vercel.app", 
+        "http://localhost:5173", 
+        "http://localhost:3000"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
